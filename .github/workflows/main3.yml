@@ -1,0 +1,40 @@
+name: Compilar APK
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Buscar el proyecto
+        id: p
+        run: |
+          echo "Archivos en el repositorio:"
+          find . -maxdepth 3 -not -path './.git/*' | sort
+          f=$(find . -name settings.gradle -not -path './.git/*' | head -n1)
+          if [ -z "$f" ]; then
+            echo "NO HAY settings.gradle: faltan archivos del proyecto en el repositorio"
+            exit 1
+          fi
+          echo "dir=$(dirname "$f")" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Compilar APK
+        run: gradle assembleDebug --no-daemon
+        working-directory: ${{ steps.p.outputs.dir }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: escaleras-apk
+          path: ${{ steps.p.outputs.dir }}/app/build/outputs/apk/debug/app-debug.apk
