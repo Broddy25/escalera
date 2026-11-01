@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Escaleras</string>
+    <!-- CAMBIA ESTA LÍNEA por la URL de tu aplicación web de Apps Script (termina en /exec) -->
+    <string name="app_url">https://script.google.com/macros/s/AKfycbwutYV534-i8GyLp-_79pc5EOex1e90gEwhdsxH1sB07yVTZ8PXFTs-GBd4BuDZn1hq8A/exec/exec</string>
+</resources>
